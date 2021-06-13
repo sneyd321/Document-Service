@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: homeowner-service
+  name: document-service
 spec:
   selector:
     matchLabels:
-      run: homeowner-service
+      run: document-service
   replicas: 1
   template:
     metadata:
       labels:
-        run: homeowner-service
+        run: document-service
     spec:
       containers:
-      - name: homeowner-service
-        image: sneyd321/homeowner-service
+      - name: document-service
+        image: sneyd321/document-service
         ports:
-        - containerPort: 8081
+        - containerPort: 8091
         
       imagePullSecrets:
         - name: key

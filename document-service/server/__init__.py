@@ -1,13 +1,18 @@
-from flask import Flask
+from flask import Flask, Response
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import pymysql
 pymysql.install_as_MySQLdb()
 
+
+
 db = SQLAlchemy()
 app = Flask(__name__)
 
+@app.route("/Health")
+def health_check():
+    return Response(status=200)
 
 def create_app(env):
     #Create app
@@ -26,6 +31,6 @@ def create_app(env):
     db.init_app(app)
     
     #Intialize modules
-    from server.api.routes import homeowner
-    app.register_blueprint(homeowner, url_prefix="/homeowner/v1")
+    from server.api.routes import document
+    app.register_blueprint(document, url_prefix="/document/v1")
     return app
