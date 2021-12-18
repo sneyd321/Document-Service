@@ -10,10 +10,12 @@ def create_ontario_documents(houseId):
 
 @document.route("House/<int:houseId>/Province/<string:province>/Document/<string:name>", methods=["PUT"])
 def update_document(houseId, province, name):
+    documnetData = request.get_json()
+    if not documnetData or "documentURL" not in documnetData:
+        return Response("Error Invalid Response", status=400)
     document = Document.query.filter(Document.houseId == houseId).filter(Document.province == province).filter(Document.name == name).first()
     if document:
-        data = request.get_json()
-        document.documentURL = data["documentURL"]
+        document.documentURL = documnetData["documentURL"]
         if document.update():
             return Response(status=200)
     return Response(status=400)
@@ -29,6 +31,11 @@ def get_homeowner_by_id(houseId):
         return Response(response="Error: Creating documents")
 
 
+@document.route("Document/<int:houseId>/Tenant")
+def get_tenant_documents(houseId):
+    if Document.query.filter(Document.houseId == houseId).first():
+        return jsonify([document.toJson() for document in Document.query.filter(Document.houseId == houseId).all()])
+    return Response(status=404)
 
 
 
